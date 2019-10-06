@@ -1,0 +1,7 @@
+.gitignore
+db.sqlite3
+.idea
+__pycache__/
+migrations
+Pipfile
+Pipfile.lock
