@@ -7,7 +7,7 @@
         </ol>
     </nav>
     <h2 class="mb-3">My Assignments</h2>
-    <a href="{% url 'teachers:assignment_add' %}" class="btn btn-primary mb-3" role="button">Add Assignment</a>
+{#    <a href="{% url 'teachers:quiz_add' %}" class="btn btn-primary mb-3" role="button">Add quiz</a>#}
     <div class="card">
         <table class="table mb-0">
             <thead>
@@ -16,24 +16,25 @@
                 <th>Course</th>
                 <th>Semester</th>
                 <th>Time</th>
+                <th>PostBy</th>
                 <th>DueDate</th>
-                <th>Submissions</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             {% for assignment in assignments %}
                 <tr>
-                    <td class="align-middle"><a href="{% url 'teachers:assignment_change' assignment.pk %}">{{ assignment.name }}</a></td>
-{#                    <td class="align-middle">{{ assignment.name }}</td>#}
+                    {#                    <td class="align-middle"><a href="{% url 'teachers:quiz_change' quiz.pk %}">{{ quiz.name }}</a></td>#}
+                    <td class="align-middle">{{ assignment.name }}</td>
                     <td class="align-middle">{{ assignment.course }}</td>
                     <td class="align-middle">{{ assignment.semester }}</td>
-                    <td class="align-middle">{{ assignment.createdTime | date:"j M H:i" }}</td>
-                    <td class="align-middle">{{ assignment.dueDate | date:"j M H:i"}}</td>
-                    <td class="align-left"><a href="{% url 'teachers:assignment_solutions' assignment.pk %}">{{ assignment.num_solution }}</a></td>
-                    {#                    <td class="text-right">#}
-                    {#                        <a href="{% url 'teachers:quiz_results' quiz.pk %}" class="btn btn-primary">View results</a>#}
-                    {#                    </td>#}
+                    <td class="align-middle">{{ assignment.createdTime }}</td>
+                    <td class="align-middle">{{ assignment.postBy }}</td>
+                    <td class="align-middle">{{ assignment.dueDate }}</td>
+
+{#                    <td class="text-right">#}
+{#                        <a href="{% url 'teachers:quiz_results' quiz.pk %}" class="btn btn-primary">View results</a>#}
+{#                    </td>#}
                 </tr>
             {% empty %}
                 <tr>

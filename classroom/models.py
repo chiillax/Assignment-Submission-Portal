@@ -1,7 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import os
-from django.conf import settings
 
 
 class User(AbstractUser):
@@ -32,7 +30,7 @@ class Assignment(models.Model):
     semester = models.IntegerField()
     name = models.CharField(max_length=255)
     description = models.TextField()
-    file = models.FileField(upload_to='media/Assignments')
+    file = models.FileField()
     createdTime = models.DateTimeField(auto_now_add=True)
     dueDate = models.DateTimeField()
     postBy = models.ForeignKey(
@@ -42,30 +40,13 @@ class Assignment(models.Model):
     def __str__(self):
         return self.name
 
-    def file_url(self):
-        return self.file.url
-
-    def file_name(self):
-        return self.file.url[25:]
-
 
 class Solution(models.Model):
     assignment = models.ForeignKey(
         Assignment, on_delete=models.CASCADE, related_name='solutions')
     submittedBy = models.ForeignKey(
         Student, on_delete=models.CASCADE, related_name='solutions')
-    file = models.FileField(upload_to='media/Solutions')
     submissionTime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.submittedBy.user.username
-
-    def file_url(self):
-        return self.file.url
-
-    def file_name(self):
-        return self.file.url[23:]
-
-    def delete(self, *args, **kwargs):
-        os.remove(os.path.join(settings.MEDIA_ROOT, self.file.name))
-        super(Solution, self).delete(*args, **kwargs)
