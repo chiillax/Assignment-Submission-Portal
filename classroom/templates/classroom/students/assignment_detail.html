@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags humanize %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'students:assignments_list' %}">My Assignments</a></li>
+            <li class="breadcrumb-item active">{{ assignment.name }}</li>
+{#            <li class="breadcrumb-item active" aria-current="page">Results</li>#}
+        </ol>
+    </nav>
+    <h3 class="mb-3">{{ assignment.name }} </h3>
+
+    <div class="card">
+        <div class="card-header">
+            <strong>Last Date : {{ assignment.dueDate | date:"j M H:i" }}</strong>
+            {#            <span class="badge badge-pill badge-primary float-right">Average Score: {{ quiz_score.average_score|default_if_none:0.0 }}</span>#}
+        </div>
+
+            <div style="margin: 20px">{{ assignment.description | linebreaksbr }}</div>
+
+        <div class="card-footer text-muted">
+            <strong>Source : <a href="{{ assignment.file_url }}"> {{ assignment.file_name }}</a></strong>
+        </div>
+        <div class="card-footer text-muted">
+            <a href="{% url 'students:solution_add' assignment.pk %}" class="btn btn-primary mb-1" role="button">Submit Solution</a>
+            {% if issubmitted == 1 %}
+                <strong><a href="{{ solution.file_url }}"><span>&nbsp;&nbsp;</span>{{ solution.file_name }}</a></strong>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

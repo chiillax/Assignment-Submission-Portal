@@ -47,7 +47,7 @@
 					</div>
 					<div class="col-6 text-right">
 						{% if user.is_authenticated %}
-						<p class="pt-3">Logged in as <strong>{{ user.username }}</strong>. <a
+						<p class="pt-3">Logged in as <strong>{{ user.username | upper}}</strong>. <a
 								href="{% url 'logout' %}">Log out</a>.
 						</p>
 						{% else %}
@@ -71,13 +71,7 @@
 					</div>
 				</div>
 				<footer>
-					<a href="https://simpleisbetterthancomplex.com">© SimpleIsBetterThanComplex.com</a>
-					/
-					<a
-						href="https://simpleisbetterthancomplex.com/tutorial/2018/01/18/how-to-implement-multiple-user-types-with-django.html">Read
-						more about this example</a>
-					/
-					<a href="https://github.com/sibtc/django-multiple-user-types-example">GitHub repository</a>
+					<a href="https://github.com/chiillax/Assignment-Submission-Portal">GitHub repository</a>
 				</footer>
 			</div>
 		</div>

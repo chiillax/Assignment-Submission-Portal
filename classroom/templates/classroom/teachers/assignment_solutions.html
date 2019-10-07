@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags humanize %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'teachers:assignments_list' %}">My Assignments</a></li>
+            <li class="breadcrumb-item"><a
+                    href="{% url 'teachers:assignment_change' assignment.pk %}">{{ assignment.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Submissions</li>
+        </ol>
+    </nav>
+    <h2 class="mb-3">{{ assignment.name }} Submissions</h2>
+
+    <div class="card">
+        <div class="card-header">
+            <strong>Taken Quizzes</strong>
+            {#            <span class="badge badge-pill badge-primary float-right">Average Score: {{ quiz_score.average_score|default_if_none:0.0 }}</span>#}
+        </div>
+        <table class="table mb-0">
+            <thead>
+            <tr>
+                <th>Roll No.</th>
+                <th>Email</th>
+                <th>Time</th>
+                <th>File</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for submission in submissions %}
+                <tr>
+                    <td>{{ submission.submittedBy.user.username | upper }}</td>
+                    <td>{{ submission.submittedBy.user.email }}</td>
+                    <td>{{ submission.submissionTime | date:"j M H:i" }}</td>
+                    <td><a href="{{ submission.file_url }}"> {{ submission.file_name }}</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <div class="card-footer text-muted">
+            {#            Total respondents: <strong>{{ total_taken_quizzes }}</strong>#}
+        </div>
+    </div>
+{% endblock %}
