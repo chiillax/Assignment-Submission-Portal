@@ -13,31 +13,31 @@
             <thead>
             <tr>
                 <th>Name</th>
-                <th>Course</th>
-                <th>Semester</th>
-                <th>Time</th>
-                <th>DueDate</th>
-                <th>Submissions</th>
+                <th style="text-align: center">Course</th>
+                <th style="text-align: center">Semester</th>
+                <th style="text-align: center">Time</th>
+                <th style="text-align: center">DueDate</th>
+                <th style="text-align: center">Submissions</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             {% for assignment in assignments %}
                 <tr>
-                    <td class="align-middle"><a href="{% url 'teachers:assignment_change' assignment.pk %}">{{ assignment.name }}</a></td>
-{#                    <td class="align-middle">{{ assignment.name }}</td>#}
-                    <td class="align-middle">{{ assignment.course }}</td>
-                    <td class="align-middle">{{ assignment.semester }}</td>
-                    <td class="align-middle">{{ assignment.createdTime | date:"j M H:i" }}</td>
-                    <td class="align-middle">{{ assignment.dueDate | date:"j M H:i"}}</td>
-                    <td class="align-left"><a href="{% url 'teachers:assignment_solutions' assignment.pk %}">{{ assignment.num_solution }}</a></td>
-                    {#                    <td class="text-right">#}
-                    {#                        <a href="{% url 'teachers:quiz_results' quiz.pk %}" class="btn btn-primary">View results</a>#}
-                    {#                    </td>#}
+                    <td class="align-left"><a href="{% url 'teachers:assignment_change' assignment.pk %}">{{ assignment.name }}</a></td>
+                    <td style="text-align: center">{{ assignment.course }}</td>
+                    <td style="text-align: center">{{ assignment.semester }}</td>
+                    <td style="text-align: center">{{ assignment.createdTime | date:"j M H:i" }}</td>
+                    <td style="text-align: center">{{ assignment.dueDate | date:"j M H:i"}}</td>
+                    {% if assignment.num_solution == 0 %}
+                        <td style="text-align: center"><a href="{% url 'teachers:assignment_solutions' assignment.pk %}" style="color: red">{{ assignment.num_solution }}</a></td>
+                    {% else %}
+                        <td style="text-align: center"><a href="{% url 'teachers:assignment_solutions' assignment.pk %}" style="color: green">{{ assignment.num_solution }}</a></td>
+                    {% endif %}
                 </tr>
             {% empty %}
                 <tr>
-                    <td class="bg-light text-center font-italic" colspan="5">You haven't created any quiz yet.</td>
+                    <td class="bg-light text-center font-italic" colspan="5">You haven't created any Assignment yet.</td>
                 </tr>
             {% endfor %}
             </tbody>

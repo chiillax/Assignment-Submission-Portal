@@ -1,17 +1,14 @@
-from django.views.generic import TemplateView
-from django.shortcuts import render
-from django.http import HttpResponse
-from classroom.models import Student, Teacher, User
-from ..forms import TeacherSignUpForm, StudentSignUpForm
+from ..forms import StudentSignUpForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from ..decorators import student_required
 from django.utils.decorators import method_decorator
-from classroom.models import Student, Teacher, User, Assignment, Solution
+from classroom.models import Student, User, Assignment, Solution
 from django.urls import reverse_lazy
 from django.contrib import messages
+from django.db.models import Count, Q
 
 
 class StudentSignUpView(CreateView):
@@ -36,8 +33,16 @@ class AssignmentListView(ListView):
     context_object_name = 'assignments'
     template_name = 'classroom/students/assignments.html'
 
+    def get_context_data(self, **kwargs):
+        # highly_rated = Count('book', filter=Q(book__rating__gte=7))
+        # Author.objects.annotate(num_books=Count('book'), highly_rated_books=highly_rated)
+
+        isDone = Count('solutions', filter=Q(solutions__submittedBy=self.request.user.student))
+        kwargs['assignments'] = Assignment.objects.filter(semester=self.request.user.student.semester).annotate(num_solution=Count('solutions'), done=isDone).order_by('-createdTime')
+        return super().get_context_data(**kwargs)
+
     def get_queryset(self):
-        queryset = Assignment.objects.filter(semester=self.request.user.student.semester)
+        queryset = Assignment.objects.filter(semester=self.request.user.student.semester).order_by('-createdTime')
         return queryset
 
 
@@ -52,7 +57,8 @@ class AssignmentDetailView(DetailView):
         issubmitted = None
         issubmitted = Solution.objects.filter(assignment=assignment, submittedBy=self.request.user.student)
         kwargs['issubmitted'] = 0
-        if issubmitted is not None:
+        if len(issubmitted) != 0:
+            # print(issubmitted)
             kwargs['issubmitted'] = 1
             kwargs['solution'] = Solution.objects.filter(assignment=assignment, submittedBy=self.request.user.student)[0]
         return super().get_context_data(**kwargs)
@@ -75,14 +81,19 @@ class SolutionAddView(CreateView):
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
+        assignment = Assignment.objects.get(pk=self.kwargs['pk'])
+        sol = Solution.objects.filter(assignment=assignment, submittedBy=self.request.user.student)
+        sol_id = 0
+        if len(sol) != 0:
+            sol_id = sol[0].pk
         solution = form.save(commit=False)
         solution.submittedBy = self.request.user.student
-        solution.assignment = Assignment.objects.get(pk=self.kwargs['pk'])
-        sol_id = Solution.objects.filter(assignment=Assignment.objects.get(pk=self.kwargs['pk']), submittedBy=self.request.user.student)[0].pk
+        solution.assignment = assignment
         solution.save()
-        sol = get_object_or_404(Solution, pk=sol_id)
-        sol.delete()
+        if sol_id != 0:
+            s = get_object_or_404(Solution, pk=sol_id)
+            s.delete()
         messages.success(self.request, 'Solution is posted successfully.')
-        return redirect('students:assignment_detail', kwargs={'pk': self.kwargs['pk']})
+        return redirect('students:assignment_detail', pk=self.kwargs['pk'])
 
 

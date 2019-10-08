@@ -15,8 +15,6 @@
 
     <div class="card">
         <div class="card-header">
-            <strong>Taken Quizzes</strong>
-            {#            <span class="badge badge-pill badge-primary float-right">Average Score: {{ quiz_score.average_score|default_if_none:0.0 }}</span>#}
         </div>
         <table class="table mb-0">
             <thead>
@@ -35,11 +33,14 @@
                     <td>{{ submission.submissionTime | date:"j M H:i" }}</td>
                     <td><a href="{{ submission.file_url }}"> {{ submission.file_name }}</a></td>
                 </tr>
+            {% empty %}
+                <tr>
+                    <td class="bg-light text-center font-italic" colspan="5">No submission yet.</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
         <div class="card-footer text-muted">
-            {#            Total respondents: <strong>{{ total_taken_quizzes }}</strong>#}
         </div>
     </div>
 {% endblock %}

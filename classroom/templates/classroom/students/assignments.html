@@ -7,17 +7,15 @@
         </ol>
     </nav>
     <h2 class="mb-3">My Assignments</h2>
-{#    <a href="{% url 'teachers:quiz_add' %}" class="btn btn-primary mb-3" role="button">Add quiz</a>#}
     <div class="card">
         <table class="table mb-0">
             <thead>
             <tr>
-                <th>Course</th>
                 <th>Name</th>
-{#                <th>Semester</th>#}
-                <th>Time</th>
-                <th>Instructor</th>
-                <th>DueDate</th>
+                <th style="text-align: center">Course</th>
+                <th style="text-align: center">Time</th>
+                <th style="text-align: center">Instructor</th>
+                <th style="text-align: center">DueDate</th>
                 <th>Submitted</th>
                 <th></th>
             </tr>
@@ -25,22 +23,21 @@
             <tbody>
             {% for assignment in assignments %}
                 <tr>
-                    {#                    <td class="align-middle"><a href="{% url 'teachers:quiz_change' quiz.pk %}">{{ quiz.name }}</a></td>#}
-                    <td class="align-middle">{{ assignment.course }}</td>
                     <td class="align-middle"><a href="{% url 'students:assignment_detail' assignment.pk %}">{{ assignment.name }}</a></td>
-{#                    <td class="align-middle">{{ assignment.semester }}</td>#}
-                    <td class="align-middle">{{ assignment.createdTime | date:"j M H:i" }}</td>
-                    <td class="align-middle">{{ assignment.postBy }}</td>
-                    <td class="align-middle">{{ assignment.dueDate | date:"j M H:i" }}</td>
-                    <td class="align-middle"></td>
-
-{#                    <td class="text-right">#}
-{#                        <a href="{% url 'teachers:quiz_results' quiz.pk %}" class="btn btn-primary">View results</a>#}
-{#                    </td>#}
+                    <td style="text-align: center">{{ assignment.course }}</td>
+                    <td style="text-align: center">{{ assignment.createdTime | date:"j M H:i" }}</td>
+                    <td style="text-align: center">{{ assignment.postBy }}</td>
+                    <td style="text-align: center">{{ assignment.dueDate | date:"j M H:i" }}</td>
+                    {% if assignment.done == 1 %}
+{#                    <td>{{ assignment.num_solution }}</td>#}
+                        <td><i class="fa fa-check-circle" style="font-size:20px; color:green"><span>&nbsp;&nbsp;</span>Submitted</i></td>
+                    {% else %}
+                        <td><i class="fa fa-times-circle" style="font-size:19px; color:red"><span>&nbsp;&nbsp;</span>Not Submitted</i></td>
+                    {% endif %}
                 </tr>
             {% empty %}
                 <tr>
-                    <td class="bg-light text-center font-italic" colspan="5">You haven't created any quiz yet.</td>
+                    <td class="bg-light text-center font-italic" colspan="5">You haven't given any Assignment yet.</td>
                 </tr>
             {% endfor %}
             </tbody>

@@ -1,8 +1,5 @@
-from django.views.generic import TemplateView
-from django.shortcuts import render
-from django.http import HttpResponse
-from classroom.models import Student, Teacher, User, Assignment, Solution
-from ..forms import TeacherSignUpForm, StudentSignUpForm
+from classroom.models import Teacher, User, Assignment, Solution
+from ..forms import TeacherSignUpForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -32,17 +29,16 @@ class TeacherSignUpView(CreateView):
 @method_decorator([login_required, teacher_required], name='dispatch')
 class AssignmentListView(ListView):
     model = Assignment
-    ordering = ('createdTime',)
+    ordering = ('-createdTime',)
     context_object_name = 'assignments'
     template_name = 'classroom/teachers/assignments.html'
 
     def get_context_data(self, **kwargs):
-        # kwargs['assignments'] = self.get_object().assignments.annotate(answers_count=Count('solutions'))
-        kwargs['assignments'] = Assignment.objects.annotate(num_solution=Count('solutions'))
+        kwargs['assignments'] = Assignment.objects.filter(postBy__user=self.request.user).annotate(num_solution=Count('solutions')).order_by('-createdTime')
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
-        queryset = Assignment.objects.filter(postBy__user=self.request.user)
+        queryset = Assignment.objects.filter(postBy__user=self.request.user).order_by('-createdTime')
         return queryset
 
 
@@ -93,14 +89,6 @@ class AssignmentDetailView(DetailView):
     def get_context_data(self, **kwargs):
         assignment = self.get_object()
         kwargs['submissions'] = Solution.objects.filter(assignment=assignment).order_by('-submissionTime')
-        # total_taken_quizzes = taken_quizzes.count()
-        # quiz_score = quiz.taken_quizzes.aggregate(average_score=Avg('score'))
-        # extra_context = {
-        #     'taken_quizzes': taken_quizzes,
-        #     'total_taken_quizzes': total_taken_quizzes,
-        #     'quiz_score': quiz_score
-        # }
-        # kwargs.update(extra_context)
         return super().get_context_data(**kwargs)
 
     def get_queryset(self):
