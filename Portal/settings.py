@@ -26,7 +26,7 @@ SECRET_KEY = 'z9d#$+szu_kk*-4_*kvn=71^zk#t^%l*wqt=nzp5k8c&pypf+&'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -160,3 +160,16 @@ MESSAGE_TAGS = {
 # Third party apps configuration
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+"""smtp details here(sensitive_email_data)"""
+# EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND')
+# EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS')
+# EMAIL_HOST = os.environ.get('EMAIL_HOST')
+# EMAIL_PORT = os.environ.get('EMAIL_PORT')
+# EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+# SERVER_EMAIL = os.environ.get('SERVER_EMAIL')
+# DEFULT_FROM_EMAIL = os.environ.get('DEFULT_FROM_EMAIL')

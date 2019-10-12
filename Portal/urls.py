@@ -9,6 +9,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('classroom.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
+    # path('accounts/', include('registration.backends.hmac.urls')),
+
     path('accounts/signup/', classroom.SignUpView.as_view(), name='signup'),
     path('accounts/signup/student/',
          students.StudentSignUpView.as_view(), name='student_signup'),
