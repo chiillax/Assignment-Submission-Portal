@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block title %}Email Sent{% endblock title %}
+
+{% block content %}
+
+    <h1>Check your inbox.</h1>
+    <p>{% trans 'Please confirm your email address to complete the registration' %}</p>
+    <p>{% trans 'We’ve emailed you instructions for activating your account, if an account exists with the email you entered. You should receive them shortly.' %}</p>
+    <p>{% trans 'If you don’t receive an email, please make sure you’ve entered the address you want to register with, and check your spam folder.' %}</p>
+
+{% endblock content %}
+

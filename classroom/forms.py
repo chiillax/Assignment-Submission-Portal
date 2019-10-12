@@ -18,7 +18,7 @@ class StudentSignUpForm(UserCreationForm):
         user.is_student = True
         user.email = self.cleaned_data.get('email')
         user.save()
-        student = Student.objects.create(user=user, semester=self.cleaned_data.get('semester'))
+        Student.objects.create(user=user, semester=self.cleaned_data.get('semester'))
         return user
 
 
@@ -34,5 +34,5 @@ class TeacherSignUpForm(UserCreationForm):
         user.is_teacher = True
         user.email = self.cleaned_data.get('email')
         user.save()
-        teacher = Teacher.objects.create(user=user)
+        Teacher.objects.create(user=user)
         return user
