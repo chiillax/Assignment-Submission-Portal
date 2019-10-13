@@ -7,7 +7,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'teachers:assignments_list' %}">My Assignments</a></li>
             <li class="breadcrumb-item"><a
-                    href="{% url 'teachers:assignment_change' assignment.pk %}">{{ assignment.name }}</a></li>
+                    href="{% url 'teachers:assignment_detail' assignment.pk %}">{{ assignment.name }}</a></li>
             <li class="breadcrumb-item active" aria-current="page">Submissions</li>
         </ol>
     </nav>

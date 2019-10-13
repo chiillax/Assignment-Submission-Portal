@@ -1,5 +1,5 @@
 from classroom.models import Teacher, User, Assignment, Solution
-from ..forms import TeacherSignUpForm
+from ..forms import TeacherSignUpForm, AssignmentCreateForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
@@ -68,7 +68,8 @@ class AssignmentListView(ListView):
 @method_decorator([login_required, teacher_required], name='dispatch')
 class AssignmentCreateView(CreateView):
     model = Assignment
-    fields = ('course', 'semester', 'name', 'description', 'dueDate', 'isLateAllowed', 'file', )
+    # fields = ('course', 'semester', 'name', 'description', 'dueDate', 'isLateAllowed', 'file', )
+    form_class = AssignmentCreateForm
     template_name = 'classroom/teachers/assignment_add_form.html'
 
     def form_valid(self, form):
@@ -76,35 +77,24 @@ class AssignmentCreateView(CreateView):
         assignment.postBy = self.request.user.teacher
         assignment.save()
         messages.success(self.request, 'Assignment is posted successfully.')
-        return redirect('teachers:assignment_change', assignment.pk)
+        return redirect('teachers:assignment_detail', assignment.pk)
 
 
 @method_decorator([login_required, teacher_required], name='dispatch')
 class AssignmentUpdateView(UpdateView):
     model = Assignment
-    fields = ('course', 'semester', 'name', 'description', 'dueDate', 'isLateAllowed', 'file', )
+    # fields = ('course', 'semester', 'name', 'description', 'dueDate', 'isLateAllowed', 'file', )
+    form_class = AssignmentCreateForm
     context_object_name = 'assignment'
     template_name = 'classroom/teachers/assignment_change_form.html'
 
-    # def get_context_data(self, **kwargs):
-    #     # kwargs['questions'] = self.get_object().questions.annotate(answers_count=Count('answers'))
-    #     kwargs[]
-    #     return super().get_context_data(**kwargs)
-
-    def get_queryset(self):
-        '''
-        This method is an implicit object-level permission management
-        This view will only match the ids of existing quizzes that belongs
-        to the logged in user.
-        '''
-        return self.request.user.teacher.assignments.all()
-
     def get_success_url(self):
-        return reverse('teachers:assignment_change', kwargs={'pk': self.object.pk})
+        messages.success(self.request, 'Assignment is updated successfully.')
+        return reverse('teachers:assignment_detail', kwargs={'pk': self.object.pk})
 
 
 @method_decorator([login_required, teacher_required], name='dispatch')
-class AssignmentDetailView(DetailView):
+class AssignmentSolutionsView(DetailView):
     model = Assignment
     context_object_name = 'assignment'
     template_name = 'classroom/teachers/assignment_solutions.html'
@@ -117,4 +107,18 @@ class AssignmentDetailView(DetailView):
     def get_queryset(self):
         return self.request.user.teacher.assignments
 
+
+@method_decorator([login_required, teacher_required], name='dispatch')
+class AssignmentDetailView(DetailView):
+    model = Assignment
+    context_object_name = 'assignment'
+    template_name = 'classroom/teachers/assignment_detail.html'
+
+    def get_context_data(self, **kwargs):
+        assignment = self.get_object()
+        kwargs['submissions'] = len(Solution.objects.filter(assignment=assignment))
+        return super().get_context_data(**kwargs)
+
+    # def get_success_url(self):
+    #     return reverse_lazy('teachers:assignment_detail', kwargs={'pk': self.object.pk})
 

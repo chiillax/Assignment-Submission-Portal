@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags humanize %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'teachers:assignments_list' %}">My Assignments</a></li>
+            <li class="breadcrumb-item active">{{ assignment.name }}</li>
+        </ol>
+    </nav>
+    <h3 class="mb-3">{{ assignment.name }} </h3>
+
+    <div class="card">
+        <div class="card-header">
+            <strong>Last Date : {{ assignment.dueDate | date:"j M H:i" }}</strong>
+            <strong style="float: right;">
+                <a href="{% url 'teachers:assignment_edit' assignment.pk %}">
+                    <span style="font-size: 25px;" class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Edit"></span>
+                </a>
+                <a href="{% url 'teachers:assignment_edit' assignment.pk %}">
+                    <span style="font-size: 27px; color: red; margin-left: 20px" class="material-icons" data-toggle="tooltip" data-placement="top" title="Delete">delete_forever</span>
+                </a>
+            </strong>
+        </div>
+
+        <div style="margin: 20px">{{ assignment.description | linebreaksbr }}</div>
+
+        <div class="card-footer text-muted">
+            <strong>Source : <a href="{{ assignment.file_url }}"> {{ assignment.file_name }}</a></strong>
+            <strong style="float: right;"> Submissions :
+                {% if submissions == 0 %}
+                    <a href="{% url 'teachers:assignment_solutions' assignment.pk %}"
+                       style="color: red">{{ submissions }}</a>
+                {% else %}
+                    <a href="{% url 'teachers:assignment_solutions' assignment.pk %}"
+                       style="color: green">{{ submissions }}</a>
+                {% endif %}
+            </strong>
+        </div>
+    </div>
+{% endblock %}

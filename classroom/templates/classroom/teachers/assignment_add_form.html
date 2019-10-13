@@ -3,21 +3,50 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {% for error in form.non_field_errors %}
+                <p{% if forloop.last %} class="mb-0" {% endif %}>{{ error }}</p>
+            {% endfor %}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    {% endif %}
+
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{% url 'teachers:assignments_list' %}">My Assignments</a></li>
             <li class="breadcrumb-item active" aria-current="page">Add a new Assignment</li>
         </ol>
     </nav>
+
     <h2 class="mb-3">Add a new Assignment</h2>
-    <div class="row">
-        <div class="col-md-6 col-sm-8 col-12">
-            <form method="post" enctype="multipart/form-data" novalidate>
-                {% csrf_token %}
-                {{ form|crispy }}
-                <button type="submit" class="btn btn-success">Save</button>
-                <a href="{% url 'teachers:assignments_list' %}" class="btn btn-outline-secondary" role="button">Cancel</a>
-            </form>
+
+    {#    <div class="row">#}
+    {#        <div class="col-md-6 col-sm-8 col-12">#}
+    <form method="post" enctype="multipart/form-data" novalidate>
+        {% csrf_token %}
+        <div style="overflow: auto">
+            <div style="float: left; width: 45%">{{ form.course|as_crispy_field }}</div>
+            <div style="float: right; width: 45%">{{ form.semester|as_crispy_field }}</div>
         </div>
-    </div>
+        <div style="overflow: auto">
+            <div style="float: left; width: 45%">{{ form.name|as_crispy_field }}</div>
+            <div style="float: right; width: 45%">{{ form.dueDate|as_crispy_field }}</div>
+        </div>
+        {{ form.description|as_crispy_field }}
+        <div style="overflow: auto">
+            <div style="float: left;">{{ form.file|as_crispy_field }}</div>
+            <div style="float: right;">{{ form.isLateAllowed|as_crispy_field }}</div>
+        </div>
+
+        <div style="text-align: center">
+            <button type="submit" class="btn btn-success">Save</button>
+            <a href="{% url 'teachers:assignments_list' %}" class="btn btn-outline-secondary" role="button">Cancel</a>
+        </div>
+    </form>
+    {#        </div>#}
+    {#    </div>#}
 {% endblock %}

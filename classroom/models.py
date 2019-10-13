@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 import os
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.contrib import messages
 
 
 class User(AbstractUser):
@@ -27,12 +29,19 @@ class Teacher(models.Model):
         return self.user.username
 
 
+def file_size(value):
+    limit = 10 * 1024 * 1024
+    if value.size > limit:
+        # messages.warning(self.request, 'File too large. Size should not exceed 10 MB.')
+        raise ValidationError('File too large. Size should not exceed 10 MB.')
+
+
 class Assignment(models.Model):
     course = models.CharField(max_length=8)
     semester = models.IntegerField()
     name = models.CharField(max_length=255)
     description = models.TextField()
-    file = models.FileField(upload_to='media/Assignments')
+    file = models.FileField(upload_to='media/Assignments', blank=True, null=True, validators=[file_size])
     createdTime = models.DateTimeField(auto_now_add=True)
     dueDate = models.DateTimeField()
     postBy = models.ForeignKey(
@@ -54,7 +63,7 @@ class Solution(models.Model):
         Assignment, on_delete=models.CASCADE, related_name='solutions')
     submittedBy = models.ForeignKey(
         Student, on_delete=models.CASCADE, related_name='solutions')
-    file = models.FileField(upload_to='media/Solutions')
+    file = models.FileField(upload_to='media/Solutions', validators=[file_size])
     submissionTime = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
