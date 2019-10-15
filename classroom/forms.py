@@ -44,6 +44,6 @@ class AssignmentCreateForm(forms.ModelForm):
         # fields = ['name', 'start_date', 'end_date']
         fields = ['course', 'semester', 'name', 'description', 'dueDate', 'isLateAllowed', 'file', ]
         widgets = {
-            'dueDate': forms.DateTimeInput(attrs={"placeholder" : "YYYY-MM-DD HH:mm (24 hours format)"})
+            'dueDate': forms.DateTimeInput(attrs={"placeholder" : "MM-DD-YYYY HH:mm (24 hours format)"})
         }
 

@@ -18,7 +18,7 @@
                 <a href="{% url 'teachers:assignment_edit' assignment.pk %}">
                     <span style="font-size: 25px;" class="fa fa-edit" data-toggle="tooltip" data-placement="top" title="Edit"></span>
                 </a>
-                <a href="{% url 'teachers:assignment_edit' assignment.pk %}">
+                <a href="{% url 'teachers:assignment_delete' assignment.pk %}">
                     <span style="font-size: 27px; color: red; margin-left: 20px" class="material-icons" data-toggle="tooltip" data-placement="top" title="Delete">delete_forever</span>
                 </a>
             </strong>
@@ -30,11 +30,9 @@
             <strong>Source : <a href="{{ assignment.file_url }}"> {{ assignment.file_name }}</a></strong>
             <strong style="float: right;"> Submissions :
                 {% if submissions == 0 %}
-                    <a href="{% url 'teachers:assignment_solutions' assignment.pk %}"
-                       style="color: red">{{ submissions }}</a>
+                    <a href="{% url 'teachers:assignment_solutions' assignment.pk %}" style="color: red">{{ submissions }}</a>
                 {% else %}
-                    <a href="{% url 'teachers:assignment_solutions' assignment.pk %}"
-                       style="color: green">{{ submissions }}</a>
+                    <a href="{% url 'teachers:assignment_solutions' assignment.pk %}" style="color: green">{{ submissions }}</a>
                 {% endif %}
             </strong>
         </div>

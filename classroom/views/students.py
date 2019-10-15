@@ -31,7 +31,6 @@ class StudentSignUpView(CreateView):
         # login(self.request, user)
         user = form.save()
         user.is_active = False
-
         user.save()
         current_site = get_current_site(self.request)
         mail_subject = 'Activate your account.'

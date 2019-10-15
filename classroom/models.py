@@ -3,7 +3,6 @@ from django.contrib.auth.models import AbstractUser
 import os
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.contrib import messages
 
 
 class User(AbstractUser):
@@ -32,7 +31,6 @@ class Teacher(models.Model):
 def file_size(value):
     limit = 10 * 1024 * 1024
     if value.size > limit:
-        # messages.warning(self.request, 'File too large. Size should not exceed 10 MB.')
         raise ValidationError('File too large. Size should not exceed 10 MB.')
 
 

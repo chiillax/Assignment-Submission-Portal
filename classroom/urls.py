@@ -16,8 +16,8 @@ urlpatterns = [
     path('teachers/', include(([
         path('', teachers.AssignmentListView.as_view(), name='assignments_list'),
         path('assignment/add/', teachers.AssignmentCreateView.as_view(), name='assignment_add'),
-        path('assignment/<int:pk>/edit', teachers.AssignmentUpdateView.as_view(), name='assignment_edit'),
-        # path('quiz/<int:pk>/delete/', teachers.QuizDeleteView.as_view(), name='quiz_delete'),
+        path('assignment/<int:pk>/edit/', teachers.AssignmentUpdateView.as_view(), name='assignment_edit'),
+        path('assignment/<int:pk>/delete/', teachers.AssignmentDeleteView.as_view(), name='assignment_delete'),
         path('assignments/<int:pk>/solutions/', teachers.AssignmentSolutionsView.as_view(), name='assignment_solutions'),
         path('assignments/<int:pk>/', teachers.AssignmentDetailView.as_view(), name='assignment_detail'),
     ], 'classroom'), namespace='teachers')),

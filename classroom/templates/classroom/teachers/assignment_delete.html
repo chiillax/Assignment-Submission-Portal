@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags humanize %}
+
+{% block content %}
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'teachers:assignments_list' %}">My Assignments</a></li>
+            <li class="breadcrumb-item"><a
+                    href="{% url 'teachers:assignment_detail' assignment.pk %}">{{ assignment.name }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Delete</li>
+        </ol>
+    </nav>
+    <h3 class="mb-3">Delete {{ assignment.name }} </h3>
+
+    <form action="" method="post">
+        {% csrf_token %}
+        <p>Are you sure you want to delete it ?</p>
+        <button class="btn btn-danger ml-2" type="submit">Confirm</button>
+        <a href="{% url 'teachers:assignments_list' %}" class="btn btn-outline-secondary" role="button">Cancel</a>
+    </form>
+{% endblock %}

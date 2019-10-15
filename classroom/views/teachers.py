@@ -122,3 +122,15 @@ class AssignmentDetailView(DetailView):
     # def get_success_url(self):
     #     return reverse_lazy('teachers:assignment_detail', kwargs={'pk': self.object.pk})
 
+
+@method_decorator([login_required, teacher_required], name='dispatch')
+class AssignmentDeleteView(DeleteView):
+    model = Assignment
+    context_object_name = 'assignment'
+    template_name = 'classroom/teachers/assignment_delete.html'
+    success_url = reverse_lazy('teachers:assignments_list')
+
+    def test_func(self):
+        obj = self.get_object()
+        return obj.user.teacher == self.request.user.teacher
+
