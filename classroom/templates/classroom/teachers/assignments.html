@@ -14,7 +14,7 @@
             <tr>
                 <th>Name</th>
                 <th style="text-align: center">Course</th>
-                <th style="text-align: center">Semester</th>
+{#                <th style="text-align: center">Semester</th>#}
                 <th style="text-align: center">Time</th>
                 <th style="text-align: center">DueDate</th>
                 <th style="text-align: center">Submissions</th>
@@ -26,7 +26,7 @@
                 <tr>
                     <td class="align-left"><a href="{% url 'teachers:assignment_detail' assignment.pk %}">{{ assignment.name }}</a></td>
                     <td style="text-align: center">{{ assignment.course }}</td>
-                    <td style="text-align: center">{{ assignment.semester }}</td>
+{#                    <td style="text-align: center">{{ assignment.semester }}</td>#}
                     <td style="text-align: center">{{ assignment.createdTime | date:"j M H:i" }}</td>
                     <td style="text-align: center">{{ assignment.dueDate | date:"j M H:i"}}</td>
                     {% if assignment.num_solution == 0 %}

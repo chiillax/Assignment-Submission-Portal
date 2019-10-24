@@ -1,4 +1,4 @@
-from classroom.models import Teacher, User, Assignment, Solution
+from classroom.models import Teacher, User, Assignment, Solution, Course
 from ..forms import TeacherSignUpForm, AssignmentCreateForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -133,4 +133,3 @@ class AssignmentDeleteView(DeleteView):
     def test_func(self):
         obj = self.get_object()
         return obj.user.teacher == self.request.user.teacher
-

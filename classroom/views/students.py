@@ -1,11 +1,11 @@
-from ..forms import StudentSignUpForm
+from ..forms import StudentSignUpForm, StudentCoursesForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from ..decorators import student_required
 from django.utils.decorators import method_decorator
-from classroom.models import Student, User, Assignment, Solution
+from classroom.models import Student, User, Assignment, Solution, Course
 from django.urls import reverse_lazy
 from django.contrib import messages
 from django.db.models import Count, Q
@@ -57,16 +57,21 @@ class AssignmentListView(ListView):
     context_object_name = 'assignments'
     template_name = 'classroom/students/assignments.html'
 
-    def get_context_data(self, **kwargs):
+    # def get_context_data(self, **kwargs):
         # highly_rated = Count('book', filter=Q(book__rating__gte=7))
         # Author.objects.annotate(num_books=Count('book'), highly_rated_books=highly_rated)
 
-        isDone = Count('solutions', filter=Q(solutions__submittedBy=self.request.user.student))
-        kwargs['assignments'] = Assignment.objects.filter(semester=self.request.user.student.semester).annotate(num_solution=Count('solutions'), done=isDone).order_by('-createdTime')
-        return super().get_context_data(**kwargs)
+        # student = self.request.user.student
+        # student_courses = student.courses.values_list('pk', flat=True)
+        # isDone = Count('solutions', filter=Q(solutions__submittedBy=student))
+        # kwargs['assignments'] = Assignment.objects.filter(course__in=student_courses, createdTime__gt=student.semester.startTime).annotate(num_solution=Count('solutions'), done=isDone).order_by('-createdTime')
+        # return super().get_context_data(**kwargs)
 
     def get_queryset(self):
-        queryset = Assignment.objects.filter(semester=self.request.user.student.semester).order_by('-createdTime')
+        student = self.request.user.student
+        student_courses = student.courses.all()
+        done = Count('solutions', filter=Q(solutions__submittedBy=student))
+        queryset = Assignment.objects.filter(course__in=student_courses, createdTime__gt=student.semester.startTime).annotate(done=done).order_by('-createdTime')
         return queryset
 
 
@@ -120,3 +125,17 @@ class SolutionAddView(CreateView):
         messages.success(self.request, 'Solution is posted successfully.')
         return redirect('students:assignment_detail', pk=self.kwargs['pk'])
 
+
+@method_decorator([login_required, student_required], name='dispatch')
+class StudentCoursesView(UpdateView):
+    model = Student
+    form_class = StudentCoursesForm
+    template_name = 'classroom/students/courses_form.html'
+    success_url = reverse_lazy('students:assignments_list')
+
+    def get_object(self):
+        return self.request.user.student
+
+    def form_valid(self, form):
+        messages.success(self.request, 'Courses updated with success!')
+        return super().form_valid(form)

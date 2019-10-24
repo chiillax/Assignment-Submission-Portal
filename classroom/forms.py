@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from .models import Assignment
-from classroom.models import Student, Teacher, User
+from classroom.models import Student, Teacher, User, Course
 
 
 class StudentSignUpForm(UserCreationForm):
@@ -46,4 +46,39 @@ class AssignmentCreateForm(forms.ModelForm):
         widgets = {
             'dueDate': forms.DateTimeInput(attrs={"placeholder" : "MM-DD-YYYY HH:mm (24 hours format)"})
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['course'].queryset = Course.objects.none()
+
+        if 'semester' in self.data:
+            try:
+                semester_id = int(self.data.get('semester'))
+                self.fields['course'].queryset = Course.objects.filter(semester_id=semester_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['course'].queryset = self.instance.semester.course_set.order_by('name')
+
+
+class StudentCoursesForm(forms.ModelForm):
+    class Meta:
+        model = Student
+        fields = ('semester', 'courses', )
+        # widgets = {
+        #     'courses': forms.CheckboxSelectMultiple
+        # }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['courses'].queryset = Course.objects.none()
+
+        if 'semester' in self.data:
+            try:
+                semester_id = int(self.data.get('semester'))
+                self.fields['courses'].queryset = Course.objects.filter(semester_id=semester_id).order_by('name')
+            except (ValueError, TypeError):
+                pass  # invalid input from the client; ignore and fallback to empty City queryset
+        elif self.instance.pk:
+            self.fields['courses'].queryset = self.instance.semester.course_set.order_by('name')
 

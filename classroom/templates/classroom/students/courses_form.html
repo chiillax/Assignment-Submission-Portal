@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <h2 class="mb-3">Update your Courses</h2>
+    <div class="row">
+        <div class="col-md-6 col-sm-8 col-12">
+            <form method="post" id="studentCoursesForm" data-courses-url="{% url 'ajax_load_courses' %}" novalidate>
+                {% csrf_token %}
+                {{ form|crispy }}
+                <button type="submit" class="btn btn-success">Save changes</button>
+                <a href="{% url 'students:assignments_list' %}" class="btn btn-outline-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script>
+        $("#id_semester").change(function () {
+            var url = $("#studentCoursesForm").attr("data-courses-url");
+            var semesterId = $(this).val();
+
+            $.ajax({
+                url: url,
+                data: {
+                    'semester': semesterId
+                },
+                success: function (data) {
+                    $("#id_courses").html(data);
+                }
+            });
+        });
+    </script>
+
+{% endblock %}
