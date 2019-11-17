@@ -15,6 +15,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_text
 from classroom.tokens import account_activation_token
 from django.core.mail import EmailMessage
+import datetime
+from django.utils import timezone
 
 
 class StudentSignUpView(CreateView):
@@ -83,7 +85,6 @@ class AssignmentDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         assignment = self.get_object()
-        issubmitted = None
         issubmitted = Solution.objects.filter(assignment=assignment, submittedBy=self.request.user.student)
         kwargs['issubmitted'] = 0
         if len(issubmitted) != 0:
@@ -111,6 +112,15 @@ class SolutionAddView(CreateView):
 
     def form_valid(self, form):
         assignment = Assignment.objects.get(pk=self.kwargs['pk'])
+        submission_time = datetime.datetime.now()
+        if assignment.isLateAllowed is False:
+            if submission_time.date() > timezone.localdate(assignment.dueDate):
+                messages.error(self.request, 'Last date of submission is over.')
+                return redirect('students:assignment_detail', pk=self.kwargs['pk'])
+            if submission_time.date() == timezone.localdate(assignment.dueDate) and submission_time.time() > timezone.localtime(assignment.dueDate).time():
+                messages.error(self.request, 'Last date of submission is over.')
+                return redirect('students:assignment_detail', pk=self.kwargs['pk'])
+
         sol = Solution.objects.filter(assignment=assignment, submittedBy=self.request.user.student)
         sol_id = 0
         if len(sol) != 0:

@@ -8,8 +8,8 @@
     </nav>
     <h2 class="mb-3">My Assignments</h2>
     <a href="{% url 'teachers:assignment_add' %}" class="btn btn-primary mb-3" role="button">Add Assignment</a>
-    <div class="card">
-        <table class="table mb-0">
+    <div class="" style="overflow-x:auto;">
+        <table class="table mb-0" style="border-spacing: 0; width: 100%; border: 2px solid #ddd">
             <thead>
             <tr>
                 <th>Name</th>
@@ -18,7 +18,6 @@
                 <th style="text-align: center">Time</th>
                 <th style="text-align: center">DueDate</th>
                 <th style="text-align: center">Submissions</th>
-                <th></th>
             </tr>
             </thead>
             <tbody>
