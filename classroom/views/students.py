@@ -85,6 +85,8 @@ class AssignmentDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         assignment = self.get_object()
+        if assignment.file is None:
+            print("AMIR")
         issubmitted = Solution.objects.filter(assignment=assignment, submittedBy=self.request.user.student)
         kwargs['issubmitted'] = 0
         if len(issubmitted) != 0:

@@ -21,18 +21,17 @@
         <div style="margin: 20px">{{ assignment.description | linebreaksbr }}</div>
 
         <div class="card-footer text-muted">
-            <strong>Source : <a href="{{ assignment.file_url }}"> {{ assignment.file_name }}</a></strong>
+            <strong>Source : {% if assignment.file_name %}
+                <a href="{{ assignment.file_url }}"> {{ assignment.file_name }}</a></strong>
+            {% endif %}
         </div>
         <div class="card-footer text-muted">
-{#            {% if assignment.dueDate >  %}#}
-                <a href="{% url 'students:solution_add' assignment.pk %}" class="btn btn-primary mb-1" role="button">Submit Solution</a>
-                {% if issubmitted == 1 %}
-                    <strong><a href="{{ solution.file_url }}"><span>&nbsp;&nbsp;</span>{{ solution.file_name }}
-                    </a></strong>
-                {% endif %}
-{#            {% else %}#}
-{#                <a href="{% url 'students:solution_add' assignment.pk %}" class="btn btn-primary mb-1 disabled" role="button">Submit Solution</a>#}
-{#            {% endif %}#}
+            <a href="{% url 'students:solution_add' assignment.pk %}" class="btn btn-primary mb-1" role="button">Submit
+                Solution</a>
+            {% if issubmitted == 1 %}
+                <strong><a href="{{ solution.file_url }}"><span>&nbsp;&nbsp;</span>{{ solution.file_name }}
+                </a></strong>
+            {% endif %}
         </div>
     </div>
 {% endblock %}

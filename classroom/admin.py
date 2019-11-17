@@ -5,7 +5,7 @@ from .models import User, Assignment, Solution, Student, Teacher, Semester, Cour
 admin.site.register(Solution)
 # admin.site.register(Student)
 # admin.site.register(Teacher)
-admin.site.register(Course)
+# admin.site.register(Course)
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -22,6 +22,7 @@ class UserAdmin(admin.ModelAdmin):
 
 class StudentAdmin(admin.ModelAdmin):
     list_display = ['user', 'get_email', 'semester']
+    ordering = ['semester']
 
     class Meta:
         model = Student
@@ -32,6 +33,7 @@ class StudentAdmin(admin.ModelAdmin):
 
 class TeacherAdmin(admin.ModelAdmin):
     list_display = ['user', 'get_email']
+    ordering = ['-user']
 
     class Meta:
         model = Teacher
@@ -42,6 +44,7 @@ class TeacherAdmin(admin.ModelAdmin):
 
 class AssignmentAdmin(admin.ModelAdmin):
     list_display = ['name', 'course', 'postBy', 'createdTime']
+    ordering = ['-createdTime']
 
     class Meta:
         model = Assignment
@@ -55,8 +58,17 @@ class SemesterAdmin(admin.ModelAdmin):
         model = Semester
 
 
+class CourseAdmin(admin.ModelAdmin):
+    list_display = ['name', 'semester']
+    ordering = ['semester', 'name']
+
+    class Meta:
+        model = Course
+
+
 admin.site.register(User, UserAdmin)
 admin.site.register(Student, StudentAdmin)
 admin.site.register(Teacher, TeacherAdmin)
 admin.site.register(Assignment, AssignmentAdmin)
 admin.site.register(Semester, SemesterAdmin)
+admin.site.register(Course, CourseAdmin)

@@ -2,12 +2,13 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from .models import Assignment
-from classroom.models import Student, Teacher, User, Course
+from classroom.models import Student, Teacher, User, Course, Semester
 
 
 class StudentSignUpForm(UserCreationForm):
     email = forms.EmailField(required=True)
-    semester = forms.IntegerField(required=True)
+    # semester = forms.IntegerField(required=True)
+    semester = forms.ModelChoiceField(queryset=Semester.objects.all())
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -44,7 +45,7 @@ class AssignmentCreateForm(forms.ModelForm):
         # fields = ['name', 'start_date', 'end_date']
         fields = ['course', 'semester', 'name', 'description', 'dueDate', 'isLateAllowed', 'file', ]
         widgets = {
-            'dueDate': forms.DateTimeInput(attrs={"placeholder" : "MM-DD-YYYY HH:mm (24 hours format)"})
+            'dueDate': forms.DateTimeInput(attrs={"placeholder" : "MM/DD/YYYY HH:mm (24 hours format)"})
         }
 
     def __init__(self, *args, **kwargs):

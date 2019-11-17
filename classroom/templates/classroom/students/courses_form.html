@@ -9,6 +9,8 @@
             <form method="post" id="studentCoursesForm" data-courses-url="{% url 'ajax_load_courses' %}" novalidate>
                 {% csrf_token %}
                 {{ form|crispy }}
+                {#                {{ form.semester|as_crispy_field }}#}
+                {#                {{ form.courses|as_crispy_field }}#}
                 <button type="submit" class="btn btn-success">Save changes</button>
                 <a href="{% url 'students:assignments_list' %}" class="btn btn-outline-secondary">Cancel</a>
             </form>
@@ -17,6 +19,7 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
+
         $("#id_semester").change(function () {
             var url = $("#studentCoursesForm").attr("data-courses-url");
             var semesterId = $(this).val();

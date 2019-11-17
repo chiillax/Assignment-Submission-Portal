@@ -75,9 +75,13 @@ class Assignment(models.Model):
         return self.name
 
     def file_url(self):
+        if not self.file:
+            return
         return self.file.url
 
     def file_name(self):
+        if not self.file:
+            return
         return self.file.url[25:]
 
 
