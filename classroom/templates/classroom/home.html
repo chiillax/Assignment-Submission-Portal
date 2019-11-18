@@ -3,11 +3,23 @@
 {% block content %}
     <h2>Welcome to the Assignment Submission Portal! <span class="icon-emo-happy"></span></h2>
     <p class="lead">
-        If you already have an account, go ahead and <a href="{% url 'login' %}">log in</a>. If you are new to Django
-        Schools, get started
+        If you already have an account, go ahead and <a href="{% url 'login' %}">log in</a>. If you are new here, get started
         by creating a <a href="{% url 'student_signup' %}">student account</a> or a <a
             href="{% url 'teacher_signup' %}">teacher account</a>.
     </p>
     <hr>
     <h3>What's this about?</h3>
+    <p class="lead">We started Assignment Portal for the Student-Teacher Community to provide the ease of online
+        submission of assignments so that every time a new assignment pop-up or new semester starts , it's there for you
+        already.
+        <br><br>The Portal is designed to support TAs, students and Professors with submissions of Assignments on Time
+        and keeps you posted.
+        It is primarily designed by the students of IIITA , for IIITA.<br><br>
+        The Portal contains the functionality of login and signup for students and teacher separately.The teacher can
+        add assignments for the course they teach. They can also add up Instructions and required files for the
+        assignment.
+        <br><br>The students can add up the courses they are enrolled in and hence access the assignment of the course.
+        They can submit the solutions to the assignment which are accessible for evaluation by the instructor of the
+        course.
+    </p>
 {% endblock %}
