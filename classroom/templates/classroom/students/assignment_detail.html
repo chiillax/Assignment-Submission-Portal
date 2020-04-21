@@ -18,7 +18,7 @@
             {#            <span class="badge badge-pill badge-primary float-right">Average Score: {{ quiz_score.average_score|default_if_none:0.0 }}</span>#}
         </div>
 
-        <div style="margin: 20px">{{ assignment.description | linebreaksbr }}</div>
+        <div style="margin: 20px; overflow-x:auto; overflow-y:auto; display: block; max-height: 450px;">{{ assignment.description | linebreaksbr }}</div>
 
         <div class="card-footer text-muted">
             <strong>Source : {% if assignment.file_name %}
